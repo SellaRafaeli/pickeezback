@@ -1,0 +1,59 @@
+<html>
+<body>
+
+<h1><%= user %>'s Photos</h1>
+
+<hr />
+<% photos.forEach(function(el, idx) { 
+    p = photos[idx];
+    def_url = 'http://images1.ynet.co.il/PicServer4/2015/01/14/5817958/581794722702767183103no.jpg'
+    %>
+    <li onclick='showPic()' url="<%=p.url || def_url %>">photo: <%= JSON.stringify(p) %></li>    
+<% }); %>
+
+<input type="file" id="files"/ value='upload some file'>
+<p id="status"></p>
+<div id="preview"><img id='img' src="/images/default.png" style="width:300px; display:none" /></div>
+
+<script type="text/javascript" src="/javascripts/s3upload.js"></script>
+<script type="text/javascript" src="/javascripts/jquery.js"></script>
+
+<script type="text/javascript">
+function showPic(){
+    document.getElementById('img').src = event.srcElement.getAttribute('url');
+    document.getElementById('img').style.display='block';
+}
+
+function addPicToUser(url) {
+    $.post('/addPicToUser',{url: url},function(){ document.location.reload(); },'json');
+}
+
+function s3_upload(){
+    var status_elem = document.getElementById("status");
+    var url_elem = document.getElementById("avatar_url");
+    var preview_elem = document.getElementById("preview");
+    var s3upload = new S3Upload({
+        file_dom_selector: 'files',
+        s3_sign_put_url: '/sign_s3',
+        onProgress: function(percent, message) {
+            status_elem.innerHTML = 'Upload progress: ' + percent + '% ' + message;
+        },
+        onFinishS3Put: function(public_url) {
+            status_elem.innerHTML = 'Upload completed. Uploaded to: '+ public_url;
+            //url_elem.value = public_url;
+            preview_elem.innerHTML = '<img src="'+public_url+'" style="width:300px;" />';
+            addPicToUser(public_url);
+        },
+        onError: function(status) {
+            status_elem.innerHTML = 'Upload error: ' + status;
+        }
+    });
+}
+
+(function() {
+    var input_element = document.getElementById("files");
+    input_element.onchange = s3_upload;
+})();
+</script>
+</body>
+</html>

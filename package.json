@@ -1,0 +1,26 @@
+{
+  "name": "pickeezback",
+  "version": "0.0.0",
+  "description": "BE for pickeez",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SellaRafaeli/pickeezback.git"
+  },
+  "author": "sella.rafaeli@gmail.com",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/SellaRafaeli/pickeezback/issues"
+  },
+  "homepage": "https://github.com/SellaRafaeli/pickeezback",
+  "dependencies": {
+          "express": "3.x",
+          "ejs": "*",
+          "aws-sdk": "*",
+          "mongojs": "*",
+          "body-parser": "*"
+      } 
+}
