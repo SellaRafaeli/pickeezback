@@ -1,10 +1,19 @@
 console.log("let's rock")
 
+//constants
+var AWS_ACCESS_KEY = process.env.S3_KEY;
+var AWS_SECRET_KEY = process.env.S3_SECRET;
+var S3_BUCKET = process.env.S3_BUCKET
+var PICKEEZ_MONGOLAB_URI = process.env.PICKEEZ_MONGOLAB_URI
+
+if (false) PICKEEZ_MONGOLAB_URI = 'pickeez' //for localhost testing 
+
+//packages
 var express = require('express');
 var http = require('http');
 var path = require('path');
 var aws = require('aws-sdk');
-var mongo = require('mongojs')('pickeez');
+var mongo = require('mongojs')(PICKEEZ_MONGOLAB_URI);
 var photos = mongo.collection('photos');
 var bodyParser = require('body-parser')
 
@@ -16,16 +25,11 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-//Setup and globals
 app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(path.join(__dirname, 'public')));
-
-var AWS_ACCESS_KEY = process.env.S3_KEY;
-var AWS_SECRET_KEY = process.env.S3_SECRET;
-var S3_BUCKET = process.env.S3_BUCKET
 
 lg = log = function(err,data) { console.log(err || data); }
 
